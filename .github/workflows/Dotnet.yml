@@ -5,7 +5,12 @@ on:
     branches: [master]
   pull_request:
     branches: ["master"]
-
+env:
+  AZURE_WEBAPP_NAME: my-dotnet-webapp       # Change this
+  AZURE_RESOURCE_GROUP: my-resource-group   # Change this
+  AZURE_REGION: North Europe                      # Change this
+  DOTNET_VERSION: '8.0' 
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -41,3 +46,34 @@ jobs:
       with:
         name: App
         path: out/**/*.dll
+        
+    - uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+            # Ensure resource group exists
+    - name: Create Resource Group
+      run: |
+        az group create \
+          --name ${{ env.AZURE_RESOURCE_GROUP }} \
+          --location ${{ env.AZURE_REGION }}
+
+      # Ensure App Service Plan exists
+    - name: Create App Service Plan
+      run: |
+        az appservice plan create \
+          --name "${{ env.AZURE_WEBAPP_NAME }}-plan" \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --sku B1 --is-linux
+
+        - name: Create Web App
+        run: |
+          az webapp create \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --plan "${{ env.AZURE_WEBAPP_NAME }}-plan" \
+            --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --runtime "DOTNETCORE:${{ env.DOTNET_VERSION }}" \
+            --deployment-local-git
+
