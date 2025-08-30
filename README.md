@@ -6,4 +6,5 @@
   <li>should multiple texts per image be allowed? currently it is not.</li>
   <li>implement missing CRUD routes</li>
   <li>more and deeper tests required</li>
+  <li>program.cs should be cleaned with routes, dependency setup & configuration being moved to seperate classes</li>
  </ul>
