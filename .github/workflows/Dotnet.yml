@@ -31,26 +31,12 @@ jobs:
       run: az provider register --namespace Microsoft.Web
 
             # Ensure resource group exists
-    - name: Create Resource Group
+    - name: Deploy ARM template
       run: |
-        az group create \
-          --name ${{ env.AZURE_RESOURCE_GROUP }} \
-          --location ${{ env.AZURE_REGION }}
-
-      # Ensure App Service Plan exists
-    - name: Create App Service Plan
-      run: |
-        az appservice plan create \
-          --name "${{ env.AZURE_WEBAPP_NAME }}-plan" \
+        az deployment group create \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          --sku B1 --is-linux
-    
-    - name: Create Web App
-      run: |
-        az webapp create \
-          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          --plan "${{ env.AZURE_WEBAPP_NAME }}-plan" \
-          --name ${{ env.AZURE_WEBAPP_NAME }} \
-          --runtime "DOTNETCORE:${{ env.DOTNET_VERSION }}" \
-          --deployment-local-git
+          --template-file ./arm.json \
+          --parameters webAppName=${{ env.AZURE_WEBAPP_NAME }} \
+                       location=${{ env.AZURE_REGION }} \
+                       appServicePlanName=${{ env.AZURE_WEBAPP_NAME }}-plan
 
