@@ -31,6 +31,11 @@ jobs:
 
     - name: Register Microsoft.Web provider
       run: az provider register --namespace Microsoft.Web
+    - name: Ensure Resource Group Exists
+      run: |
+        az group show --name ${{ env.AZURE_RESOURCE_GROUP }} || \
+        az group create --name ${{ env.AZURE_RESOURCE_GROUP }} --location ${{ env.AZURE_REGION }}
+
 
     - name: Deploy ARM template
       run: |
