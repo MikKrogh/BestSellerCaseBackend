@@ -27,6 +27,9 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+    - name: Register Microsoft.Web provider
+      run: az provider register --namespace Microsoft.Web
+
             # Ensure resource group exists
     - name: Create Resource Group
       run: |
