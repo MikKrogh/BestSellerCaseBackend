@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "webAppName": {
-      "type": "tmpwebap"
+      "type": "string"
     },
     "location": {
-      "type": "northeurope"
+      "type": "string"
     },
     "appServicePlanName": {
-      "type": "tmpwebappsericeplan"
+      "type": "string"
     }
   },
   "resources": [
