@@ -7,7 +7,7 @@ on:
     branches: ["master"]
 env:
   AZURE_WEBAPP_NAME: bestSellerCaseBackend
-  AZURE_RESOURCE_GROUP: bestsellerGroup   
+  AZURE_RESOURCE_GROUP: bestsellerGroup1   
   AZURE_REGION: northeurope
   DOTNET_VERSION: '8.0'   
   
