@@ -29,7 +29,10 @@ jobs:
 
     - name: Register Microsoft.Web provider
       run: az provider register --namespace Microsoft.Web
-
+    - name: List repo files
+      run: |
+        pwd
+        ls -R
             # Ensure resource group exists
     - name: Deploy ARM template
       run: |
