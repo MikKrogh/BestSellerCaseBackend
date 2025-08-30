@@ -38,7 +38,7 @@ jobs:
       run: |
         az deployment group create \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          --template-file ./arm.json \
+          --template-file arm.json \
           --parameters webAppName=${{ env.AZURE_WEBAPP_NAME }} \
                        location=${{ env.AZURE_REGION }} \
                        appServicePlanName=${{ env.AZURE_WEBAPP_NAME }}-plan
