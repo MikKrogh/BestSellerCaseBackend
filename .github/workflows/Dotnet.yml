@@ -11,6 +11,10 @@ env:
   AZURE_REGION: North Europe                      # Change this
   DOTNET_VERSION: '8.0' 
   
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   build:
     runs-on: ubuntu-latest
