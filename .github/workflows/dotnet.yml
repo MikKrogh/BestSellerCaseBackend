@@ -7,7 +7,7 @@ on:
     branches: ["master"]
 env:
   AZURE_WEBAPP_NAME: bestSellerCaseBackend
-  AZURE_RESOURCE_GROUP: BestSellerGroup   
+  AZURE_RESOURCE_GROUP: BestSellerGroup
   AZURE_REGION: northeurope
   DOTNET_VERSION: '8.0'   
   
@@ -39,5 +39,4 @@ jobs:
           --template-file arm.json \
           --parameters webAppName=${{ env.AZURE_WEBAPP_NAME }} \
                        location=${{ env.AZURE_REGION }} \
-                       appServicePlanName=${{ env.AZURE_WEBAPP_NAME }}-plan \
-                       
+                       appServicePlanName=${{ env.AZURE_WEBAPP_NAME }}-plan
