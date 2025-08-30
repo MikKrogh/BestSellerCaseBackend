@@ -44,13 +44,13 @@ jobs:
           --name "${{ env.AZURE_WEBAPP_NAME }}-plan" \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
           --sku B1 --is-linux
-
-        - name: Create Web App
-        run: |
-          az webapp create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --plan "${{ env.AZURE_WEBAPP_NAME }}-plan" \
-            --name ${{ env.AZURE_WEBAPP_NAME }} \
-            --runtime "DOTNETCORE:${{ env.DOTNET_VERSION }}" \
-            --deployment-local-git
+    
+    - name: Create Web App
+      run: |
+        az webapp create \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --plan "${{ env.AZURE_WEBAPP_NAME }}-plan" \
+          --name ${{ env.AZURE_WEBAPP_NAME }} \
+          --runtime "DOTNETCORE:${{ env.DOTNET_VERSION }}" \
+          --deployment-local-git
 
