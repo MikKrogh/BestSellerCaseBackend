@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: ["master"]
 env:
-  AZURE_WEBAPP_NAME: my-dotnet-webapp       # Change this
+  AZURE_WEBAPP_NAME: my-dotnet-webapp2       # Change this
   AZURE_RESOURCE_GROUP: my-resource-group   # Change this
   AZURE_REGION: northeurope                      # Change this
   DOTNET_VERSION: '8.0' 
