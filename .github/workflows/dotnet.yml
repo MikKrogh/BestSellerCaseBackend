@@ -68,3 +68,4 @@ jobs:
           --parameters webAppName=${{ env.AZURE_WEBAPP_NAME }} \
                        location=${{ env.AZURE_REGION }} \
                        appServicePlanName=${{ env.AZURE_WEBAPP_NAME }}-plan
+                       
