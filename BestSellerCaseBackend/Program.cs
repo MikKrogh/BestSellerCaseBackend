@@ -16,14 +16,14 @@ if (builder.Environment.IsProduction())
     });
 }
 
-builder.Services.AddControllers()
+//allows properties in json bodies to be parsed case insensitive string values, but also integers for enums
+builder.Services.AddControllers() 
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        // Allows both string and numeric enum values
         options.JsonSerializerOptions.AllowTrailingCommas = true;
         options.JsonSerializerOptions.NumberHandling =
-            System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString;
+            JsonNumberHandling.AllowReadingFromString;
     });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -42,18 +42,25 @@ builder.Services.AddTransient<TranslationsService>();
 
 var app = builder.Build();
 
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
-
-
+app.Use(async (context, next) => 
+{
+    if (context.Request.Headers.TryGetValue("x-mySecret", out var secret) && secret == "mySecret")
+    {
+        await next();
+    }
+    else
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return;
+    }
+});
 
 app.MapGet(string.Empty, () => "hello world").WithOpenApi();
 app.MapPost("/translate", async (TranslationRequest request, [FromServices] TranslationsService service) =>
 {
-    //handle dublicates or allow multiple translations per image?
     var entity = request.MapToEntity();
     await service.AddTranslationAsync(entity);
     return Results.Ok();

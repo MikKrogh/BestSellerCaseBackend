@@ -13,6 +13,7 @@ public class InitialTestCases : WebApplicationFactory<Program>
     public InitialTestCases()
     {
         client = CreateClient();
+        client.DefaultRequestHeaders.Add("x-mySecret", "mySecret");
 
     }
     protected override void ConfigureWebHost(IWebHostBuilder builder)
