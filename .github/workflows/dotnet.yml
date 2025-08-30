@@ -1,0 +1,44 @@
+name: build solution and run tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: ["master"]
+env:
+  AZURE_WEBAPP_NAME: my-dotnet-webapp       # Change this
+  AZURE_RESOURCE_GROUP: my-resource-group   # Change this
+  AZURE_REGION: northeurope                      # Change this
+  DOTNET_VERSION: '8.0' 
+  
+  
+permissions:
+  id-token: write
+  contents: read
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:        
+    - uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Register Microsoft.Web provider
+      run: az provider register --namespace Microsoft.Web
+    - name: List repo files
+      run: |
+        pwd
+        ls -R
+            # Ensure resource group exists
+    - name: Deploy ARM template
+      run: |
+        az deployment group create \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --template-file ./workflows/arm.json \
+          --parameters webAppName=${{ env.AZURE_WEBAPP_NAME }} \
+                       location=${{ env.AZURE_REGION }} \
+                       appServicePlanName=${{ env.AZURE_WEBAPP_NAME }}-plan
