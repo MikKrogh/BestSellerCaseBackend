@@ -40,5 +40,5 @@ jobs:
           --parameters webAppName=${{ env.AZURE_WEBAPP_NAME }} \
                        location=${{ env.AZURE_REGION }} \
                        appServicePlanName=${{ env.AZURE_WEBAPP_NAME }}-plan \
-                       appGroupName=${{ env.AZURE_WEBAPP_NAME }}-group
+                       appGroupName=${{ env.AZURE_RESOURCE_GROUP }}
                        
