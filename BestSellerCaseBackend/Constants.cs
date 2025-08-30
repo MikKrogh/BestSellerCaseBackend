@@ -34,8 +34,8 @@ internal static class EntityHelper
 
         return new TranslationEntity
         {
-            PartitionKey = request.CountryCode.ToString(),
-            RowKey = request.ImageId,
+            PartitionKey = request.ImageId,
+            RowKey = request.CountryCode.ToString(),
             Text = request.Text,
             TextAlignment = request.TextAlignment.ToString(),
             IsTranslated = false

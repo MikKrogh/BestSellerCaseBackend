@@ -11,7 +11,7 @@ internal record TranslationEntity : ITableEntity
     public string Text { get; init; } = string.Empty;
     public string TextAlignment { get; init; } = string.Empty;
     public bool IsTranslated { get; init; } = false;
-    public string CountryCode => PartitionKey;
-    public string ImageId => RowKey;
+    public string CountryCode => RowKey;
+    public string ImageId => PartitionKey;
 }
 
