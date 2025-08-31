@@ -54,7 +54,7 @@ app.MapGet(string.Empty, () => "hello world").WithOpenApi();
 app.MapPost("/translate", async (TranslationRequest request, [FromServices] TranslationsService service) =>
 {
     var entity = request.MapToEntity();
-    service.AddTranslationAsync(entity);
+    await service.AddTranslationAsync(entity);
     return Results.Ok();
 })
 .WithOpenApi();
