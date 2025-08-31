@@ -37,9 +37,6 @@ internal class TranslationsService
 
     public async Task AddTranslationAsync(TranslationEntity entity)
     {
-        
-        if (!isTableCreated)
-            await CreateTableIfNotExistsAsync();
         await tableClient.AddEntityAsync(entity);
     }
 
