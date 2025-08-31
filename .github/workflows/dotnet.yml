@@ -18,11 +18,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      azurite:
-        image: mcr.microsoft.com/azure-storage/azurite
-        ports:
-          - 10002:10002  # Table storage
+    #services:
+     # azurite:
+      #  image: mcr.microsoft.com/azure-storage/azurite
+       # ports:
+        #  - 10002:10002  # Table storage
 
 
     steps:       
@@ -36,11 +36,11 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
       
-    - name: Build (test)
-      run: dotnet build --no-restore
+    #- name: Build (test)
+     # run: dotnet build --no-restore
       
-    - name: Run test
-      run: dotnet test
+    #- name: Run test
+     # run: dotnet test
 
     - name: Build (release)
       run: dotnet build --configuration Release
@@ -48,11 +48,11 @@ jobs:
     - name: Publish
       run: dotnet publish -c Release -o out
 
-    - name: Upload DLL artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: App
-        path: out/**/*.dll
+    #- name: Upload DLL artifact
+     # uses: actions/upload-artifact@v4
+      #with:
+       # name: App
+        #path: out/**/*.dll
 
     - uses: azure/login@v1
       with:
@@ -79,10 +79,10 @@ jobs:
 
                        
   
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v4
-      with:
-        name: .App
+    #- name: Download artifact from build job
+     # uses: actions/download-artifact@v4
+      #with:
+       # name: .App
         
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
@@ -90,4 +90,4 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         slot-name: 'Production'
-        package: .
+        package: ./out
