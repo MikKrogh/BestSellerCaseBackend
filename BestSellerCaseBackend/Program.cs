@@ -7,16 +7,8 @@ using static Backend.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsProduction())
-{
-    builder.Configuration.AddAzureAppConfiguration(options =>
-    {
-        options.Connect(new Uri(builder.Configuration["AppConfigEndpoint"]), new DefaultAzureCredential())
-        .Select("UserService*").TrimKeyPrefix("UserService:");
-    });
-}
 
-//allows properties in json bodies to be parsed case insensitive string values, but also integers for enums
+
 builder.Services.AddControllers() 
     .AddJsonOptions(options =>
     {
@@ -47,15 +39,15 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.Use(async (context, next) => 
 {
-    if (context.Request.Headers.TryGetValue("x-mySecret", out var secret) && secret == "mySecret")
-    {
         await next();
-    }
-    else
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return;
-    }
+    //if (context.Request.Headers.TryGetValue("x-mySecret", out var secret) && secret == "mySecret")
+    //{
+    //}
+    //else
+    //{
+    //    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+    //    return;
+    //}
 });
 
 app.MapGet(string.Empty, () => "hello world").WithOpenApi();

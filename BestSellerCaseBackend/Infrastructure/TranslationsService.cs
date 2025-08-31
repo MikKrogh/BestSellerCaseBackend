@@ -10,6 +10,7 @@ internal class TranslationsService
     private bool isTableCreated = false;
     public TranslationsService(IConfiguration config, ILogger<TranslationsService> logger) // who needs logging?
     {
+        var t = config.GetConnectionString("AppConfigEndpoint");
         var connString = config["TableStorageAccount"] ?? throw new Exception("Cannot initialize without a connectionstring");
 
         if (connString == "UseDevelopmentStorage=true;")
