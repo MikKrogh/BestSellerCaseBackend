@@ -36,6 +36,7 @@ public class InitialTestCases : WebApplicationFactory<Program>
         var response = await client.PostAsJsonAsync(route, body);
 
         //Then
+        var response1 = await client.PostAsJsonAsync(route, body with {CountryCode="GB" });
         response.EnsureSuccessStatusCode();
     }
 

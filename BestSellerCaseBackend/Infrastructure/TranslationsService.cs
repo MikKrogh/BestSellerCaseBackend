@@ -7,7 +7,7 @@ internal class TranslationsService
 {
     private readonly TableClient tableClient;
     private const string TableName = "TranslationRequests";
-
+    private bool isTableCreated = false;
     public TranslationsService(IConfiguration config, ILogger<TranslationsService> logger) // who needs logging?
     {
         var connString = config["TableStorageAccount"] ?? throw new Exception("Cannot initialize without a connectionstring");
@@ -24,6 +24,8 @@ internal class TranslationsService
 
     public async Task AddTranslationAsync(TranslationEntity entity)
     {
+        if (!isTableCreated)
+            await CreateTableIfNotExistsAsync();
         await tableClient.AddEntityAsync(entity);
     }
 
@@ -32,7 +34,9 @@ internal class TranslationsService
         try
         {
             await tableClient.CreateIfNotExistsAsync();
+            isTableCreated = true;
         }
+
         catch (Exception _)
         {
         }
