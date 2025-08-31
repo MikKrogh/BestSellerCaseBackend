@@ -21,23 +21,19 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore
-        
-      - name: Build
-        run: dotnet build --no-restore
-
+        run: dotnet restore        
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+        
       - name: dotnet publish
-        run: dotnet publish ./BestSellerCaseBackend/Backend.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
+        run: dotnet publish ./BestSellerCaseBackend/Backend.csproj -c Release -o ./publish_output
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./publish_output
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,11 +43,7 @@ jobs:
       contents: read    # Required for actions/checkout
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -60,13 +52,20 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4B47355A8C364528BBE4686A12877509 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AB50C1CC494345E1A26484D53EFF9BD5 }}
 
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+          path: ./publish_output
+      
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'bestSellerCaseBackend'
           slot-name: 'Production'
-          package: .net-app
+          package: ./publish_output
+
 
 
 
