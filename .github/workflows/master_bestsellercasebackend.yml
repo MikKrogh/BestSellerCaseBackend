@@ -21,10 +21,10 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore BestSellerCaseBackend/BestSellerCaseBackend/backend.csproj
+        run: dotnet restore BestSellerCaseBackend/backend.csproj
 
       - name: Build with dotnet
-        run: dotnet build BestSellerCaseBackend/BestSellerCaseBackend/backend.csproj --configuration Release --no-restore
+        run: dotnet build BestSellerCaseBackend/backend.csproj --configuration Release --no-restore
 
       - name: Publish with dotnet
         run: dotnet publish BestSellerCaseBackend/BestSellerCaseBackend/backend.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp --no-build
@@ -63,3 +63,4 @@ jobs:
           app-name: 'bestSellerCaseBackend'
           slot-name: 'Production'
           package: .net-app
+
