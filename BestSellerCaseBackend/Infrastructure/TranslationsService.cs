@@ -8,24 +8,36 @@ internal class TranslationsService
     private readonly TableClient tableClient;
     private const string TableName = "TranslationRequests";
     private bool isTableCreated = false;
-    
-    public TranslationsService(IConfiguration config, ILogger<TranslationsService> logger) // who needs logging?
+    TE t;
+
+    public TranslationsService(IConfiguration config, TE t) // who needs logging?
     {
+        this.t = t;
+        string connectionstring = string.Empty;
+        try
+        {
+            connectionstring = config.GetConnectionString("TableStorageAccount") ?? throw new Exception("Cannot initialize without a connectionstring");
 
-        var connString = config.GetConnectionString("TableStorageAccount") ?? throw new Exception("Cannot initialize without a connectionstring");
+            if (connectionstring == "UseDevelopmentStorage=true;")
+            {
+                tableClient = new(connectionstring, TableName);
+                CreateTableIfNotExistsAsync(); // this is only done because its a simple case/prototype, never allow async in ctor.
+            }
+            else
 
-        if (connString == "UseDevelopmentStorage=true;")
-            tableClient = new(connString, TableName);
+                tableClient = new TableClient(new Uri(connectionstring), TableName, new DefaultAzureCredential());
 
-        else
-            tableClient = new TableClient(new Uri(connString), TableName, new DefaultAzureCredential());
-
-        // this is only done because its a simple case/prototype, never allow async in ctor.
-        CreateTableIfNotExistsAsync();
+        }
+        catch (Exception e)
+        {
+            t.errs.Add(e.ToString());
+            throw;
+        }
     }
 
     public async Task AddTranslationAsync(TranslationEntity entity)
     {
+        
         if (!isTableCreated)
             await CreateTableIfNotExistsAsync();
         await tableClient.AddEntityAsync(entity);
@@ -39,8 +51,9 @@ internal class TranslationsService
             isTableCreated = true;
         }
 
-        catch (Exception _)
+        catch (Exception e)
         {
+            t.errs.Add(e.ToString());
         }
     }
 
