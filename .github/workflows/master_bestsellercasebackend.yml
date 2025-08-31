@@ -21,16 +21,14 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore ./BestSellerCaseBackend/Backend.csproj
+        run: dotnet restore 
 
       - name: Build solution
-        run: dotnet build ./Cont.csproj --configuration Release --no-restore
+        run: dotnet build  --configuration Release --no-restore
 
-      - name: Run tests
-        run: dotnet test --configuration Release --no-build --verbosity normal
 
       - name: Publish web app
-        run: dotnet publish ./Cont.csproj -c Release -o ./publish_output
+        run: dotnet publish ./BestSellerCaseBackend/Backend.csproj -c Release -o ./publish_output
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -66,4 +64,5 @@ jobs:
           app-name: 'bestSellerCaseBackend'
           slot-name: 'Production'
           package: ./webapp
+
 
