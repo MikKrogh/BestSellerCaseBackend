@@ -21,7 +21,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore ./Cont.csproj
+        run: dotnet restore ./BestSellerCaseBackend/Backend.csproj
 
       - name: Build solution
         run: dotnet build ./Cont.csproj --configuration Release --no-restore
@@ -66,3 +66,4 @@ jobs:
           app-name: 'bestSellerCaseBackend'
           slot-name: 'Production'
           package: ./webapp
+
