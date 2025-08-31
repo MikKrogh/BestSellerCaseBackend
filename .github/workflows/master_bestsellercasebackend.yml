@@ -53,5 +53,13 @@ jobs:
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_510FA65B0F7A47DFBDBBFC37B8BF7AD5 }}
-          tenant-id: ${{ secre
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4B47355A8C364528BBE4686A12877509 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AB50C1CC494345E1A26484D53EFF9BD5 }}
 
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'bestSellerCaseBackend'
+          slot-name: 'Production'
+          package: .net-app
