@@ -1,4 +1,3 @@
-using Azure.Identity;
 using Backend;
 using Backend.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -6,8 +5,6 @@ using System.Text.Json.Serialization;
 using static Backend.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 builder.Services.AddControllers() 
     .AddJsonOptions(options =>
@@ -52,9 +49,9 @@ app.Use(async (context, next) =>
 
 app.MapGet(string.Empty, () => "hello world").WithOpenApi();
 app.MapPost("/translate", async (TranslationRequest request, [FromServices] TranslationsService service) =>
-{
+{    
     var entity = request.MapToEntity();
-    await service.AddTranslationAsync(entity);
+    service.AddTranslationAsync(entity);
     return Results.Ok();
 })
 .WithOpenApi();

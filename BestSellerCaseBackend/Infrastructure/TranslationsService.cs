@@ -8,10 +8,11 @@ internal class TranslationsService
     private readonly TableClient tableClient;
     private const string TableName = "TranslationRequests";
     private bool isTableCreated = false;
+    
     public TranslationsService(IConfiguration config, ILogger<TranslationsService> logger) // who needs logging?
     {
-        var t = config.GetConnectionString("AppConfigEndpoint");
-        var connString = config["TableStorageAccount"] ?? throw new Exception("Cannot initialize without a connectionstring");
+
+        var connString = config.GetConnectionString("TableStorageAccount") ?? throw new Exception("Cannot initialize without a connectionstring");
 
         if (connString == "UseDevelopmentStorage=true;")
             tableClient = new(connString, TableName);
@@ -20,7 +21,7 @@ internal class TranslationsService
             tableClient = new TableClient(new Uri(connString), TableName, new DefaultAzureCredential());
 
         // this is only done because its a simple case/prototype, never allow async in ctor.
-        CreateTableIfNotExistsAsync(); 
+        CreateTableIfNotExistsAsync();
     }
 
     public async Task AddTranslationAsync(TranslationEntity entity)
