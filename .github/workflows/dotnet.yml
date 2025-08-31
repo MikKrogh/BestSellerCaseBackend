@@ -70,12 +70,26 @@ jobs:
       run: az provider register --namespace Microsoft.Web
 
 
+    #- name: Ensure Resource Group Exists
+     # run: |
+      #  az group show --name ${{ env.AZURE_RESOURCE_GROUP }} || \
+       # az group create --name ${{ env.AZURE_RESOURCE_GROUP }} --location ${{ env.AZURE_REGION }}
+
+
+    #- name: Deploy ARM template
+      #run: |
+        #az deployment group create  \
+          #--resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #--template-file arm.json \
+          #--parameters webAppName=${{ env.AZURE_WEBAPP_NAME }} \
+                       #location=${{ env.AZURE_REGION }} \
+                       #appServicePlanName=${{ env.AZURE_WEBAPP_NAME }}-plan
                        
   
-    #- name: Download artifact from build job
-     # uses: actions/download-artifact@v4
-      #with:
-       # name: .App
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v4
+      with:
+        name: .net-app
 
         
     - name: Deploy to Azure Web App
