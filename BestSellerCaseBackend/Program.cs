@@ -51,7 +51,7 @@ app.UseHttpsRedirection();
 //    }
 //});
 
-app.MapGet(string.Empty, () => "hello world").WithOpenApi();
+app.MapGet(string.Empty, ([FromServices]IConfiguration config) => config.GetConnectionString("TableStorageAccount")).WithOpenApi();
 app.MapPost("/translate", async (TranslationRequest request, [FromServices] TranslationsService service) =>
 {
     try
