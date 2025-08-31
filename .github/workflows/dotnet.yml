@@ -90,7 +90,7 @@ jobs:
       #with:
        # name: .App
     - name: List published files
-      run: ls -R out
+      run: ls -R ${{ env.AZURE_REGION }}
         
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
