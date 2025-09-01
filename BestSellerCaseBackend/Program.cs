@@ -6,14 +6,14 @@ using static Backend.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        options.JsonSerializerOptions.AllowTrailingCommas = true;
-        options.JsonSerializerOptions.NumberHandling =
-            JsonNumberHandling.AllowReadingFromString;
-    });
+builder.Services.AddControllers() // allows the json bodies of incomming httpRequests to use either the interger value or string value of a enum.
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.AllowTrailingCommas = true;
+    options.JsonSerializerOptions.NumberHandling =
+        JsonNumberHandling.AllowReadingFromString;
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -28,49 +28,39 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddLogging();
 builder.Services.AddTransient<TranslationsService>();
-builder.Services.AddSingleton<TE>();
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
-//app.Use(async (context, next) =>
-//{
-//    if (HttpMethods.IsGet(context.Request.Method))    
-//        await next();    
-//    else
-//    {
-//        if (context.Request.Headers.TryGetValue("x-mySecret", out var secret) && secret == "mySecret")
-//            await next();
-//        else
-//        {
-//            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-//            return;
-//        }
-//    }
-//});
+app.Use(async (context, next) =>
+{
+    if (HttpMethods.IsGet(context.Request.Method))
+        await next();
+    else
+    {
+        if (context.Request.Headers.TryGetValue("x-mySecret", out var secret) && secret == "mySecret")
+            await next();
+        else
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return;
+        }
+    }
+});
 
 app.MapGet(string.Empty, ([FromServices]IConfiguration config) => config.GetConnectionString("TableStorageAccount")).WithOpenApi();
 app.MapPost("/translate", async (TranslationRequest request, [FromServices] TranslationsService service) =>
 {
-    try
-    {
-        var entity = request.MapToEntity();
-        await service.AddTranslationAsync(entity);
-        return Results.Ok();
-    }
-    catch (Exception e)
-    {
-        return Results.UnprocessableEntity(e.ToString());
-    }
-
+    var entity = request.MapToEntity();
+    await service.AddTranslationAsync(entity);
+    return Results.Ok();
 })
 .WithOpenApi();
 
 app.Run();
 public partial class Program { }
-
 
 internal record TranslationRequest
 {
@@ -81,9 +71,3 @@ internal record TranslationRequest
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public TextAlignment TextAlignment { get; init; } = TextAlignment.Undefined;
 }
-
-public class TE
-{
-    public List<string> errs = new();
-}
-
