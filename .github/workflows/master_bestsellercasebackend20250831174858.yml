@@ -23,6 +23,15 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Restore dependencies
+        run: dotnet restore
+      
+      - name: Build (test)
+        run: dotnet build --no-restore
+        
+      - name: Run test
+        run: dotnet test
+
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -54,6 +63,21 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3536DD0D7F054FE58C2CE710541318AB }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_969B4D59E0F446C08E5C56C73E2AFDD8 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7A06B7C100104CCFBF89334BD4E78C2E }}
+          
+      #- name: Ensure Resource Group Exists
+       # run: |
+        #  az group show --name ${{ env.AZURE_RESOURCE_GROUP }} || \
+         # az group create --name ${{ env.AZURE_RESOURCE_GROUP }} --location ${{ env.AZURE_REGION }}
+  
+  
+      #- name: Deploy ARM template
+        #run: |
+          #az deployment group create  \
+            #--resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            #--template-file arm.json \
+            #--parameters webAppName=${{ env.AZURE_WEBAPP_NAME }} \
+                         #location=${{ env.AZURE_REGION }} \
+                         #appServicePlanName=${{ env.AZURE_WEBAPP_NAME }}-plan             
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -62,4 +86,5 @@ jobs:
           app-name: 'BestSellerCaseBackend20250831174858'
           slot-name: 'Production'
           package: .
+
           
