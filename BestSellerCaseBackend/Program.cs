@@ -50,7 +50,7 @@ app.Use(async (context, next) =>
     }
 });
 
-app.MapGet(string.Empty, ([FromServices]IConfiguration config) => config.GetConnectionString("TableStorageAccount")).WithOpenApi();
+app.MapGet(string.Empty, () => "hello world.").WithOpenApi();
 app.MapPost("/translate", async (TranslationRequest request, [FromServices] TranslationsService service) =>
 {
     var entity = request.MapToEntity();
