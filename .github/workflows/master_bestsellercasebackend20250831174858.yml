@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     services:
       azurite:
         image: mcr.microsoft.com/azure-storage/azurite
@@ -93,4 +93,5 @@ jobs:
           package: .
 
           
+
 
