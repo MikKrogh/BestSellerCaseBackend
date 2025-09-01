@@ -7,6 +7,7 @@ public static class Constants
         Undefined = 0,
         US,
         UK,
+        SE,
         DK,
         FR,
         DE,
