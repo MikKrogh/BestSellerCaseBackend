@@ -1,8 +1,9 @@
 ﻿using Azure.Data.Tables;
 using Azure.Identity;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("BestSellerCaseBackend.Tests")]
 namespace Backend.Infrastructure;
-
 internal class TranslationsService
 {
     private readonly TableClient tableClient;
@@ -22,5 +23,10 @@ internal class TranslationsService
     public async Task AddTranslationAsync(TranslationEntity entity)
     {
         await tableClient.AddEntityAsync(entity);
+    }
+
+    public async Task AttemptCreateTable()
+    {
+        await tableClient.CreateIfNotExistsAsync();
     }
 }
